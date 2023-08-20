@@ -11,28 +11,11 @@ ffbuild_enabled() {
 ffbuild_dockerbuild() {
     cd "$FFBUILD_DLDIR/$SELF"
 
-    local myconf=(
-        --disable-cli
-        --enable-static
-        --enable-pic
-        --disable-lavf
-        --disable-swscale
-        --prefix="$FFBUILD_PREFIX"
-    )
+    mkdir build && cd build
 
-    if [[ $TARGET == win* || $TARGET == linux* ]]; then
-        myconf+=(
-            --host="$FFBUILD_TOOLCHAIN"
-            --cross-prefix="$FFBUILD_CROSS_PREFIX"
-        )
-    else
-        echo "Unknown target"
-        return -1
-    fi
+    cmake -DCMAKE_TOOLCHAIN_FILE="$FFBUILD_CMAKE_TOOLCHAIN" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="$FFBUILD_PREFIX" ..
 
-    ./configure "${myconf[@]}"
-    make -j$(nproc)
-    make install
+    make
 }
 
 ffbuild_configure() {
