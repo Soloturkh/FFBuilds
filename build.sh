@@ -63,6 +63,8 @@ cat <<EOF >"$BUILD_SCRIPT"
     cd /ffbuild
     rm -rf ffmpeg prefix
 
+    #apt-get update && apt-get install -y zlib1g-dev libexpat1-dev
+    
     git clone --filter=blob:none --branch='$GIT_BRANCH' '$FFMPEG_REPO' ffmpeg
     cd ffmpeg
 
